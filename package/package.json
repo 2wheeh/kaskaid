@@ -1,7 +1,7 @@
 {
   "name": "kaskaid",
   "type": "module",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Virtualized masonry layout for React, powered by @tanstack/virtual.",
   "keywords": [
     "masonry",

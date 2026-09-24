@@ -1,5 +1,13 @@
 # react-virtual-masonry
 
+## 0.7.0
+
+### Minor Changes
+
+- [#65](https://github.com/2wheeh/kaskaid/pull/65) [`b3eda4f`](https://github.com/2wheeh/kaskaid/commit/b3eda4fd00f79748dfd539108ee894f9c0a2d962) Thanks [@2wheeh](https://github.com/2wheeh)! - **Breaking:** require `@tanstack/react-virtual >=3.14.6`. Upgrade the peer dependency to use the upstream reactive-gap fix and multi-lane placement optimization.
+
+  Remove the gutter-change remeasurement workaround from `useMasonry`; changing `gutter` now updates positions while preserving measured item sizes.
+
 ## 0.6.0
 
 ### Minor Changes
