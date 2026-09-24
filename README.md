@@ -8,6 +8,8 @@ Only the items in and around the viewport are rendered, so masonry grids with th
 pnpm add kaskaid @tanstack/react-virtual
 ```
 
+Requires `@tanstack/react-virtual >=3.14.6`.
+
 ```tsx
 import { Masonry } from 'kaskaid';
 
