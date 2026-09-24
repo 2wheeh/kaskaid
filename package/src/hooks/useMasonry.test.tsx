@@ -3,42 +3,27 @@ import { renderHook } from '@testing-library/react';
 
 import { useMasonry } from './useMasonry';
 
-const measureSpy = vi.fn();
-
-vi.mock('@tanstack/react-virtual', async (importOriginal) => {
-  const mod = await importOriginal<typeof import('@tanstack/react-virtual')>();
-  return {
-    ...mod,
-    useWindowVirtualizer: ((options: Parameters<typeof mod.useWindowVirtualizer>[0]) => {
-      const virtualizer = mod.useWindowVirtualizer(options);
-      if (virtualizer.measure !== measureSpy) {
-        measureSpy.mockImplementation(virtualizer.measure.bind(virtualizer));
-        virtualizer.measure = measureSpy;
-      }
-      return virtualizer;
-    }) as typeof mod.useWindowVirtualizer,
-  };
-});
-
-describe('useMasonry gutter workaround', () => {
-  // https://github.com/TanStack/virtual/issues/1222
-  it('remeasures when gutter changes, and only then', () => {
-    const data = [100, 200, 300, 400];
-    const { rerender } = renderHook(
-      ({ gutter }) => useMasonry({ data, estimateSize: (i) => data[i], gutter }),
+describe('useMasonry — gutter', () => {
+  it('reflects gutter changes in the returned item styles', () => {
+    const data = Array.from({ length: 8 }, () => 100);
+    const { result, rerender } = renderHook(
+      ({ gutter }) => useMasonry({ data, estimateSize: () => 100, gutter }),
       { initialProps: { gutter: 20 } }
     );
 
-    measureSpy.mockClear();
-
-    rerender({ gutter: 20 });
-    expect(measureSpy).not.toHaveBeenCalled();
-
-    rerender({ gutter: 40 });
-    expect(measureSpy).toHaveBeenCalledTimes(1);
+    expect(result.current.getItemProps(result.current.items[5]).style).toMatchObject({
+      left: 'calc(25% + 5px)',
+      width: 'calc(25% - 15px)',
+      transform: 'translateY(120px)',
+    });
 
     rerender({ gutter: 40 });
-    expect(measureSpy).toHaveBeenCalledTimes(1);
+
+    expect(result.current.getItemProps(result.current.items[5]).style).toMatchObject({
+      left: 'calc(25% + 10px)',
+      width: 'calc(25% - 30px)',
+      transform: 'translateY(140px)',
+    });
   });
 });
 
